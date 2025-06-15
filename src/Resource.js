@@ -1,23 +1,38 @@
+// Import all of your image assets at the top of the file
+import heroSrc from "/sprites/hero-sheet.png";
+import shadowSrc from "/sprites/shadow.png";
+import rodSrc from "/sprites/rod.png";
+import exitSrc from "/sprites/exit.png";
+import skySrc from "/sprites/sky.png";
+import groundSrc from "/sprites/ground.png";
+import caveSrc from "/sprites/cave.png";
+import caveGroundSrc from "/sprites/cave-ground.png";
+import knightSrc from "/sprites/knight-sheet-1.png";
+import textBoxSrc from "/sprites/text-box.png";
+import fontWhiteSrc from "/sprites/sprite-font-white.png";
+import portraitsSrc from "/sprites/portraits-sheet.png";
+
 class Resources {
   constructor() {
     // Everything we plan to download
+    // Use the imported variables here instead of string paths
     this.toLoad = {
-      hero: "/sprites/hero-sheet.png",
-      shadow: "/sprites/shadow.png",
-      rod: "/sprites/rod.png",
-      exit: "/sprites/exit.png",
+      hero: heroSrc,
+      shadow: shadowSrc,
+      rod: rodSrc,
+      exit: exitSrc,
       // Outdoor
-      sky: "/sprites/sky.png",
-      ground: "/sprites/ground.png",
+      sky: skySrc,
+      ground: groundSrc,
       // Cave
-      cave: "/sprites/cave.png",
-      caveGround: "/sprites/cave-ground.png",
+      cave: caveSrc,
+      caveGround: caveGroundSrc,
       // NPCs
-      knight: "/sprites/knight-sheet-1.png",
+      knight: knightSrc,
       // HUD
-      textBox: "/sprites/text-box.png",
-      fontWhite: "/sprites/sprite-font-white.png",
-      portraits: "/sprites/portraits-sheet.png",
+      textBox: textBoxSrc,
+      fontWhite: fontWhiteSrc,
+      portraits: portraitsSrc,
     };
 
     // A bucket to keep all of our images
