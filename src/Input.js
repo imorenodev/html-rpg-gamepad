@@ -1,52 +1,142 @@
-export const LEFT = "LEFT"
-export const RIGHT = "RIGHT"
-export const UP = "UP"
-export const DOWN = "DOWN"
+export const LEFT = "LEFT";
+export const RIGHT = "RIGHT";
+export const UP = "UP";
+export const DOWN = "DOWN";
 
 export class Input {
   constructor() {
-
     this.heldDirections = [];
     this.keys = {};
     this.lastKeys = {};
+    this.virtualGamepad = null;
 
+    this.setupKeyboardInput();
+    this.setupVirtualGamepad();
+  }
+
+  setupKeyboardInput() {
     document.addEventListener("keydown", (e) => {
-
       this.keys[e.code] = true;
-
-      // Also check for dedicated direction list
-      if (e.code === "ArrowUp" || e.code === "KeyW") {
-        this.onArrowPressed(UP);
-      }
-      if (e.code === "ArrowDown" || e.code === "KeyS") {
-        this.onArrowPressed(DOWN);
-      }
-      if (e.code === "ArrowLeft" || e.code === "KeyA") {
-        this.onArrowPressed(LEFT);
-      }
-      if (e.code === "ArrowRight" || e.code === "KeyD") {
-        this.onArrowPressed(RIGHT);
-      }
-    })
+      this.handleDirectionInput(e.code, true);
+    });
 
     document.addEventListener("keyup", (e) => {
-
       this.keys[e.code] = false;
+      this.handleDirectionInput(e.code, false);
+    });
+  }
 
-      // Also check for dedicated direction list
-      if (e.code === "ArrowUp" || e.code === "KeyW") {
-        this.onArrowReleased(UP);
+  setupVirtualGamepad() {
+    this.virtualGamepad = document.getElementById("virtual-gamepad");
+    if (!this.virtualGamepad) return;
+
+    // Handle D-pad buttons
+    const dpadButtons = this.virtualGamepad.querySelectorAll(
+      ".dpad-button[data-direction]"
+    );
+    dpadButtons.forEach((button) => {
+      const direction = button.dataset.direction;
+
+      // Touch events for mobile
+      button.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        this.onVirtualDirectionPressed(direction);
+        button.classList.add("pressed");
+      });
+
+      button.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        this.onVirtualDirectionReleased(direction);
+        button.classList.remove("pressed");
+      });
+
+      // Mouse events for desktop testing
+      button.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        this.onVirtualDirectionPressed(direction);
+        button.classList.add("pressed");
+      });
+
+      button.addEventListener("mouseup", (e) => {
+        e.preventDefault();
+        this.onVirtualDirectionReleased(direction);
+        button.classList.remove("pressed");
+      });
+
+      button.addEventListener("mouseleave", (e) => {
+        this.onVirtualDirectionReleased(direction);
+        button.classList.remove("pressed");
+      });
+    });
+
+    // Handle action buttons
+    const actionButtons = this.virtualGamepad.querySelectorAll(
+      ".action-button[data-key]"
+    );
+    actionButtons.forEach((button) => {
+      const keyCode = button.dataset.key;
+
+      // Touch events
+      button.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        this.keys[keyCode] = true;
+        button.classList.add("pressed");
+      });
+
+      button.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        this.keys[keyCode] = false;
+        button.classList.remove("pressed");
+      });
+
+      // Mouse events
+      button.addEventListener("mousedown", (e) => {
+        e.preventDefault();
+        this.keys[keyCode] = true;
+        button.classList.add("pressed");
+      });
+
+      button.addEventListener("mouseup", (e) => {
+        e.preventDefault();
+        this.keys[keyCode] = false;
+        button.classList.remove("pressed");
+      });
+
+      button.addEventListener("mouseleave", (e) => {
+        this.keys[keyCode] = false;
+        button.classList.remove("pressed");
+      });
+    });
+  }
+
+  handleDirectionInput(keyCode, isPressed) {
+    const directionMap = {
+      ArrowUp: UP,
+      KeyW: UP,
+      ArrowDown: DOWN,
+      KeyS: DOWN,
+      ArrowLeft: LEFT,
+      KeyA: LEFT,
+      ArrowRight: RIGHT,
+      KeyD: RIGHT,
+    };
+
+    const direction = directionMap[keyCode];
+    if (direction) {
+      if (isPressed) {
+        this.onArrowPressed(direction);
+      } else {
+        this.onArrowReleased(direction);
       }
-      if (e.code === "ArrowDown" || e.code === "KeyS") {
-        this.onArrowReleased(DOWN);
-      }
-      if (e.code === "ArrowLeft" || e.code === "KeyA") {
-        this.onArrowReleased(LEFT);
-      }
-      if (e.code === "ArrowRight" || e.code === "KeyD") {
-        this.onArrowReleased(RIGHT);
-      }
-    })
+    }
+  }
+
+  onVirtualDirectionPressed(direction) {
+    this.onArrowPressed(direction);
+  }
+
+  onVirtualDirectionReleased(direction) {
+    this.onArrowReleased(direction);
   }
 
   get direction() {
@@ -54,20 +144,14 @@ export class Input {
   }
 
   update() {
-    // Diff the keys on previous frame to know when new ones are pressed
-    this.lastKeys = {...this.keys};
+    this.lastKeys = { ...this.keys };
   }
 
   getActionJustPressed(keyCode) {
-    let justPressed = false;
-    if (this.keys[keyCode] && !this.lastKeys[keyCode]) {
-      justPressed = true;
-    }
-    return justPressed;
+    return this.keys[keyCode] && !this.lastKeys[keyCode];
   }
 
   onArrowPressed(direction) {
-    // Add this arrow to the queue if it's new
     if (this.heldDirections.indexOf(direction) === -1) {
       this.heldDirections.unshift(direction);
     }
@@ -75,10 +159,8 @@ export class Input {
 
   onArrowReleased(direction) {
     const index = this.heldDirections.indexOf(direction);
-    if (index === -1) {
-      return;
+    if (index !== -1) {
+      this.heldDirections.splice(index, 1);
     }
-    // Remove this key from the list
-    this.heldDirections.splice(index, 1);
   }
 }
