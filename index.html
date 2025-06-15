@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/html-rpg-gamepad/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sprite Sheet Demo</title>
+    <script type="module" crossorigin src="/html-rpg-gamepad/assets/index-abf87795.js"></script>
+    <link rel="stylesheet" href="/html-rpg-gamepad/assets/index-06d908ac.css">
+  </head>
+  <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        background: #222;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
+        position: relative;
+      }
+      
+      #virtual-gamepad {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding: 20px;
+        pointer-events: none;
+        z-index: 1000;
+      }
+      
+      .dpad-container {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        pointer-events: auto;
+      }
+      
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        pointer-events: auto;
+      }
+      
+      .dpad-button {
+        position: absolute;
+        background: linear-gradient(145deg, #555, #333);
+        border: 2px solid #777;
+        border-radius: 8px;
+        color: #fff;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.1s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .dpad-button:active,
+      .dpad-button.pressed {
+        background: linear-gradient(145deg, #666, #444);
+        border-color: #888;
+      }
+      
+      .dpad-up:active,
+      .dpad-up.pressed {
+        transform: translateX(-50%) scale(0.95);
+      }
+      
+      .dpad-down:active,
+      .dpad-down.pressed {
+        transform: translateX(-50%) scale(0.95);
+      }
+      
+      .dpad-left:active,
+      .dpad-left.pressed {
+        transform: translateY(-50%) scale(0.95);
+      }
+      
+      .dpad-right:active,
+      .dpad-right.pressed {
+        transform: translateY(-50%) scale(0.95);
+      }
+      
+      .dpad-up {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 30px;
+      }
+      
+      .dpad-down {
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 40px;
+        height: 30px;
+      }
+      
+      .dpad-left {
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 40px;
+      }
+      
+      .dpad-right {
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 40px;
+      }
+      
+      .dpad-center {
+        top: 50%;
+        left: 50%;
+        transform: translate(150%, 150%);
+        width: 30px;
+        height: 30px;
+        background: #444;
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      
+      .action-button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #555, #333);
+        border: 2px solid #777;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.1s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .action-button:active,
+      .action-button.pressed {
+        background: linear-gradient(145deg, #666, #444);
+        border-color: #888;
+        transform: scale(0.95);
+      }
+
+    </style>
+  <body>
+    <canvas id="game-canvas" width="320" height="180"></canvas>
+    <div id="virtual-gamepad">
+      <div class="dpad-container">
+        <div class="dpad-button dpad-up" data-direction="UP">↑</div>
+        <div class="dpad-button dpad-down" data-direction="DOWN">↓</div>
+        <div class="dpad-button dpad-left" data-direction="LEFT">←</div>
+        <div class="dpad-button dpad-right" data-direction="RIGHT">→</div>
+        <div class="dpad-center"></div>
+      </div>
+      
+      <div class="action-buttons">
+        <div class="action-button" data-key="Space">A</div>
+        <div class="action-button" data-key="Enter">B</div>
+      </div>
+    </div>
+    
+    <script>
+      // Prevent scrolling on touch devices
+      document.addEventListener('touchmove', (e) => {
+        if (e.target.closest('#virtual-gamepad')) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+    </script>
+  </body>
+</html>
