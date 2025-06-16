@@ -7,6 +7,7 @@
     <title>Sprite Sheet Demo</title>
   </head>
   <style>
+    
       body {
         margin: 0;
         padding: 20px;
@@ -17,6 +18,13 @@
         font-family: Arial, sans-serif;
         min-height: 100vh;
         position: relative;
+          background-image: url(Assets/sprites/nfl-bg-8.jpg);
+          background-blend-mode: overlay;
+
+          /* Add these lines for background image control */
+          background-size: cover; /* This will make the image fit the height while maintaining aspect ratio */
+          background-repeat: no-repeat; /* Prevents the image from repeating */
+          background-position: center; /* Centers the image */
       }
       
       #virtual-gamepad {
