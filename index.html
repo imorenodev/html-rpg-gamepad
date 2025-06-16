@@ -44,8 +44,8 @@
       
       .dpad-container {
         position: relative;
-        width: 150px;
-        height: 150px;
+        width: 160px;
+        height: 160px;
         pointer-events: auto;
       }
       
@@ -53,6 +53,7 @@
         display: flex;
         gap: 15px;
         pointer-events: auto;
+        flex-direction: column-reverse;
       }
       
       .dpad-button {
@@ -69,6 +70,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 50px;
+        height: 50px;
       }
       
       .dpad-button:active,
@@ -101,48 +104,29 @@
         top: 0px;
         left: 50%;
         transform: translateX(-50%);
-        width: 50px;
-        height: 40px;
       }
       
       .dpad-down {
         bottom: 0px;
         left: 50%;
         transform: translateX(-50%);
-        width: 50px;
-        height: 40px;
       }
       
       .dpad-left {
         left: 0px;
         top: 50%;
         transform: translateY(-50%);
-        width: 40px;
-        height: 50px;
       }
       
       .dpad-right {
         right: 0px;
         top: 50%;
         transform: translateY(-50%);
-        width: 40px;
-        height: 50px;
-      }
-      
-      .dpad-center {
-        top: 50%;
-        left: 50%;
-        transform: translate(200%, 200%);
-        width: 30px;
-        height: 30px;
-        background: #444;
-        border-radius: 50%;
-        pointer-events: none;
       }
       
       .action-button {
-        width: 50px;
-        height: 50px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         background: linear-gradient(145deg, #555, #333);
         border: 2px solid #777;
@@ -173,7 +157,6 @@
         <div class="dpad-button dpad-down" data-direction="DOWN">↓</div>
         <div class="dpad-button dpad-left" data-direction="LEFT">←</div>
         <div class="dpad-button dpad-right" data-direction="RIGHT">→</div>
-        <div class="dpad-center"></div>
       </div>
       
       <div class="action-buttons">
