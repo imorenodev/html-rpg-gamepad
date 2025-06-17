@@ -1,0 +1,1 @@
+html,body{padding:0;margin:0;overflow:hidden;image-rendering:pixelated}canvas{height:75%;background:blue}@media screen and (max-width: 767px) and (orientation: portrait){canvas{margin-top:30px}}@media screen and (max-width: 767px) and (orientation: landscape){canvas{margin-top:0}}@font-face{font-family:fontRetroGaming;src:url(/html-rpg-gamepad/fonts/Retro\ Gaming.ttf)}
