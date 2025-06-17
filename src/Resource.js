@@ -5,7 +5,7 @@ import rodSrc from "/sprites/rod.png";
 import exitSrc from "/sprites/exit.png";
 import skySrc from "/sprites/sky.png";
 import groundSrc from "/sprites/ground.png";
-import caveSrc from "/sprites/cave.png";
+import caveSrc from "/sprites/cave-long.png";
 import caveGroundSrc from "/sprites/cave-ground.png";
 import knightSrc from "/sprites/knight-sheet-1.png";
 import textBoxSrc from "/sprites/text-box.png";
