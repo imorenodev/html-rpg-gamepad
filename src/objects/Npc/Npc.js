@@ -3,6 +3,7 @@ import {Vector2} from "../../Vector2.js";
 import {resources} from "../../Resource.js";
 import {Sprite} from "../../Sprite.js";
 import {storyFlags} from "../../StoryFlags.js";
+import {events} from "../../Events.js";
 
 export class Npc extends GameObject {
   constructor(x, y, textConfig={}) {
@@ -33,7 +34,25 @@ export class Npc extends GameObject {
       vFrames: 1,
       position: new Vector2(-8, -20),
     })
-    this.addChild(body)
+    this.addChild(body);
+
+    this.isTrainer = textConfig.isTrainer || false;
+    this.trainerCreature = textConfig.trainerCreature || null;
+  }
+
+  ready() {
+    if (this.isTrainer) {
+      events.on("HERO_REQUESTS_ACTION", this, () => {
+        // Check if this NPC was targeted
+        // You'd need to implement proximity checking
+        if (this.trainerCreature) {
+          events.emit("TRAINER_BATTLE", {
+            trainer: this,
+            creature: this.trainerCreature
+          });
+        }
+      });
+    }
   }
 
   getContent() {

@@ -10,6 +10,8 @@ import {events} from "../Events.js";
 import {OutdoorLevel1} from "./OutdoorLevel1.js";
 import {Npc} from "../objects/Npc/Npc.js";
 import {TALKED_TO_A, TALKED_TO_B} from "../StoryFlags.js";
+import {WildEncounter} from "../objects/WildEncounter/WildEncounter.js";
+import {createCreature} from "../battle/CreatureDatabase.js";
 
 const DEFAULT_HERO_POSITION = new Vector2(gridCells(6), gridCells(5))
 
@@ -31,7 +33,6 @@ export class CaveLevel1 extends Level {
     const exit = new Exit(gridCells(3), gridCells(5))
     this.addChild(exit);
 
-
     this.heroStartPosition = params.heroPosition ?? DEFAULT_HERO_POSITION;
     const hero = new Hero(this.heroStartPosition.x, this.heroStartPosition.y);
     this.addChild(hero);
@@ -39,33 +40,43 @@ export class CaveLevel1 extends Level {
     const rod = new Rod(gridCells(9), gridCells(6))
     this.addChild(rod)
 
+    // Add wild encounter areas
+    const wildArea1 = new WildEncounter(gridCells(4), gridCells(6), {
+      encounterRate: 0.2, // 20% chance
+      encounters: ['wildRat']
+    });
+    this.addChild(wildArea1);
 
-    const npc1 = new Npc(gridCells(5), gridCells(5), {
-      //content: "I am the first NPC!",
+    const wildArea2 = new WildEncounter(gridCells(7), gridCells(4), {
+      encounterRate: 0.15, // 15% chance  
+      encounters: ['wildRat', 'wildBird']
+    });
+    this.addChild(wildArea2);
+
+    // Modified NPC to be a trainer
+    const trainerNpc = new Npc(gridCells(5), gridCells(5), {
       content: [
         {
-          string: "I just can't stand that guy.",
-          requires: [TALKED_TO_B],
-          bypass: [TALKED_TO_A],
+          string: "I challenge you to a battle!",
+          requires: [],
           addsFlag: TALKED_TO_A,
         },
         {
-          string: "He is just the worst!",
+          string: "Good battle! You're getting stronger.",
           requires: [TALKED_TO_A],
-        },
-        {
-          string: "Grumble grumble. Another day at work.",
-          requires: [],
         }
       ],
-      portraitFrame: 1
+      portraitFrame: 1,
+      isTrainer: true,
+      trainerCreature: createCreature('electricStarter', 6)
     })
-    this.addChild(npc1);
+    this.addChild(trainerNpc);
 
+    // Regular NPC
     const npc2 = new Npc(gridCells(8), gridCells(5), {
       content: [
         {
-          string: "What a wonderful day at work in the cave!",
+          string: "Be careful in the wild areas! Strange creatures roam there.",
           requires: [],
           addsFlag: TALKED_TO_B
         }
@@ -83,6 +94,11 @@ export class CaveLevel1 extends Level {
         heroPosition: new Vector2(gridCells(16), gridCells(4))
       }))
     })
-  }
 
+    // Handle trainer battles
+    events.on("TRAINER_BATTLE", this, (battleData) => {
+      // This would be handled by the Main scene
+      console.log("Trainer battle triggered!", battleData);
+    });
+  }
 }
